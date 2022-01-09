@@ -3,7 +3,7 @@ import os
 import sys
 from classes import Hero, Boss, BossBullet, Bunker
 
-size = width, height = 800, 800
+size = width, height = 896, 896
 tile_width = tile_height = 56
 screen = pygame.display.set_mode(size)
 scene = True  # для вызова боса назначить True
