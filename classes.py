@@ -3,6 +3,7 @@ import math
 
 pygame.init()
 tile_width = tile_height = 56
+width, height = 896, 896
 
 
 class Boss(pygame.sprite.Sprite):
@@ -55,6 +56,7 @@ class Bunker(pygame.sprite.Sprite):
 class Hero(pygame.sprite.Sprite):
     image1 = pygame.image.load("data/tank_sand.png")
     original_image = pygame.transform.rotate(pygame.transform.scale(image1, (42, 46)), 90)
+    image = pygame.transform.rotate(pygame.transform.scale(image1, (42, 46)), 90)
 
     def __init__(self, pos_x, pos_y, *group):
         super().__init__(*group)
@@ -86,3 +88,20 @@ class Hero(pygame.sprite.Sprite):
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pygame.transform.rotate(self.original_image, int(angle))
         self.rect = self.image.get_rect(center=self.position)
+
+
+class Camera:
+    # зададим начальный сдвиг камеры
+    def __init__(self):
+        self.dx = 0
+        self.dy = 0
+
+    # сдвинуть объект obj на смещение камеры
+    def apply(self, obj):
+        obj.rect.x += self.dx
+        obj.rect.y += self.dy
+
+    # позиционировать камеру на объекте target
+    def update(self, target):
+        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)

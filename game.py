@@ -1,7 +1,7 @@
 import pygame
 import os
 import sys
-from classes import Hero, Boss, BossBullet, Bunker
+from classes import Hero, Boss, BossBullet, Bunker, Camera
 
 size = width, height = 896, 896
 tile_width = tile_height = 56
@@ -78,10 +78,10 @@ if __name__ == '__main__':
         'empty': load_image('tileGrass1.png')
     }
     screen.fill(pygame.Color('white'))
-    FPS = 60
+    FPS = 2
     clock = pygame.time.Clock()
-    player, level_x, level_y = generate_level(load_level('level.txt'))
-
+    player, level_x, level_y = generate_level(load_level('level1.txt'))
+    camera = Camera()
     if scene:  # проверка начата ли сцена с босом
         Boss(all_sprites)
         BossBullet(all_sprites)
@@ -93,7 +93,9 @@ if __name__ == '__main__':
                 player.key_is_up = True
 
         screen.fill(pygame.Color('white'))
-
+        for sprite in all_sprites:
+            camera.apply(sprite)
+        camera.update(player)
         all_sprites.update()
         tiles_group.draw(screen)
         all_sprites.draw(screen)
