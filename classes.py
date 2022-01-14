@@ -88,6 +88,11 @@ class Hero(pygame.sprite.Sprite):
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pygame.transform.rotate(self.original_image, int(angle))
         self.rect = self.image.get_rect(center=self.position)
+        print('xy', self.rect.x, self.rect.y)
+        print('pos', self.position)
+
+    def real_xy(self):
+        return self.position
 
 
 class Camera:
@@ -103,5 +108,7 @@ class Camera:
 
     # позиционировать камеру на объекте target
     def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
+        real_x, real_y = target.real_xy()
+        self.dx = (real_x // 2 - width // 2)
+        self.dy = (real_y // 2 - height // 2)
+        print('rect dx', self.dx, self.dy)
