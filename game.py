@@ -6,8 +6,9 @@ from classes import Hero, Boss, BossBullet, Bunker, Camera
 size = width, height = 896, 896
 tile_width = tile_height = 56
 screen = pygame.display.set_mode(size)
-scene = True  # для вызова боса назначить True
+scene = False  # для вызова боса назначить True
 lives = 25  # жизни базы
+collidable_object = [] # изменятся в generate_level и при создании врагов и пуль
 
 
 def load_image(name, colorkey=None):
@@ -46,12 +47,12 @@ def generate_level(level):
             if level[y][x] == '.':
                 Tile('empty', x, y)
             elif level[y][x] == '#':
-                Tile('wall', x, y)
+                collidable_object.append(Tile('wall', x, y))
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Hero(x, y, player_group, all_sprites)
             elif level[y][x] == 'b':
-                Bunker(x, y, all_sprites)
+                collidable_object.append(Bunker(x, y, all_sprites))
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -64,6 +65,7 @@ class Tile(pygame.sprite.Sprite):
         self.image = image1
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+        print(self.rect)
 
 
 if __name__ == '__main__':
@@ -72,13 +74,12 @@ if __name__ == '__main__':
     tiles_group = pygame.sprite.Group()
     player_group = pygame.sprite.Group()
 
-
     tile_images = {
         'wall': load_image('crateWood.png'),
         'empty': load_image('tileGrass1.png')
     }
     screen.fill(pygame.Color('white'))
-    FPS = 2
+    FPS = 60
     clock = pygame.time.Clock()
     player, level_x, level_y = generate_level(load_level('level1.txt'))
     camera = Camera()
@@ -89,18 +90,36 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYUP:
-                player.key_is_up = True
 
-        screen.fill(pygame.Color('white'))
+        screen.fill(pygame.Color('red'))
         for sprite in all_sprites:
+            hasCollide = False
+
+            for collide in collidable_object:
+                hasCollide = collide.rect.colliderect(player)
+                if hasCollide:
+                    print(collide, hasCollide)
+                    break
+
+            if hasCollide:
+
+                player.rect.x -=  5
+                break
+
             camera.apply(sprite)
+            sprite.update()
+
+
         camera.update(player)
-        all_sprites.update()
+
         tiles_group.draw(screen)
         all_sprites.draw(screen)
         player_group.draw(screen)
+
         clock.tick(FPS)
+
         pygame.display.flip()
+
+
 
     pygame.quit()

@@ -48,7 +48,6 @@ class Bunker(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *group):
         super().__init__(*group)
         self.image = Bunker.image
-        self.rect = self.image.get_rect()
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
@@ -87,12 +86,13 @@ class Hero(pygame.sprite.Sprite):
         rel_x, rel_y = mouse_x - self.rect.x, mouse_y - self.rect.y
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pygame.transform.rotate(self.original_image, int(angle))
-        self.rect = self.image.get_rect(center=self.position)
-        print('xy', self.rect.x, self.rect.y)
-        print('pos', self.position)
 
     def real_xy(self):
         return self.position
+
+    def last_move_coordinate(self):
+        pass
+
 
 
 class Camera:
@@ -108,7 +108,6 @@ class Camera:
 
     # позиционировать камеру на объекте target
     def update(self, target):
-        real_x, real_y = target.real_xy()
-        self.dx = (real_x // 2 - width // 2)
-        self.dy = (real_y // 2 - height // 2)
-        print('rect dx', self.dx, self.dy)
+        x, y = target.rect.center
+        self.dx = -(x + target.rect.w / 2 - width / 2)
+        self.dy = -(y + target.rect.h / 2 - height / 2)
