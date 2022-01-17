@@ -110,6 +110,8 @@ class Bullet(pygame.sprite.Sprite):
         self.dx = dx / len
         self.dy = dy / len
         self.speed = 10
+        angle = math.degrees(math.atan2(-dy, dx)) - 90
+        self.image = pygame.transform.rotate(self.image, angle)
 
 
     def update(self):
