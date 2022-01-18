@@ -1,7 +1,7 @@
 import pygame
 import os
 import sys
-from classes import Hero, Boss, BossBullet, Bunker, Camera
+from classes import Hero, Boss, BossBullet, Bunker, Camera, Bullet
 
 size = width, height = 896, 896
 tile_width = tile_height = 56
@@ -89,6 +89,8 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                Bullet(*event.pos, player, all_sprites)
 
         screen.fill(pygame.Color('white'))
         # for sprite in all_sprites:
