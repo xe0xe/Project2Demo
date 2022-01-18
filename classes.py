@@ -86,13 +86,10 @@ class Hero(pygame.sprite.Sprite):
         rel_x, rel_y = mouse_x - self.rect.x, mouse_y - self.rect.y
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pygame.transform.rotate(self.original_image, int(angle))
+        # self.rect = self.image.get_rect(center=self.position)
 
-    def real_xy(self):
-        return self.position
-
-    def last_move_coordinate(self):
-        pass
-
+    def collide(self):
+        pygame.sprite.spritecollide()
 
 
 class Camera:

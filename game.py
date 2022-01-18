@@ -65,7 +65,6 @@ class Tile(pygame.sprite.Sprite):
         self.image = image1
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
-        print(self.rect)
 
 
 if __name__ == '__main__':
@@ -91,27 +90,29 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill(pygame.Color('red'))
-        for sprite in all_sprites:
-            hasCollide = False
+        screen.fill(pygame.Color('white'))
+        # for sprite in all_sprites:
+        #     hasCollide = False
+        #
+        #     for collide in collidable_object:
+        #         hasCollide = collide.rect.colliderect(player)
+        #         pygame.sprite.spritecollide()
+        #         if hasCollide:
+        #             print(collide, hasCollide)
+        #             break
+        #
+        #     if hasCollide:
+        #
+        #         player.rect.x -= 5
+        #         break
+        #
+        #     camera.apply(sprite)
+        #     sprite.update()
 
-            for collide in collidable_object:
-                hasCollide = collide.rect.colliderect(player)
-                if hasCollide:
-                    print(collide, hasCollide)
-                    break
-
-            if hasCollide:
-
-                player.rect.x -=  5
-                break
-
-            camera.apply(sprite)
-            sprite.update()
-
-
+        camera.apply(all_sprites)
         camera.update(player)
 
+        all_sprites.update()
         tiles_group.draw(screen)
         all_sprites.draw(screen)
         player_group.draw(screen)
