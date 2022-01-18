@@ -111,8 +111,11 @@ if __name__ == '__main__':
         #     camera.apply(sprite)
         #     sprite.update()
 
-        camera.apply(all_sprites)
+        for sprite in all_sprites:
+            camera.apply(sprite)
         camera.update(player)
+
+        player.collide(collidable_object)
 
         all_sprites.update()
         tiles_group.draw(screen)

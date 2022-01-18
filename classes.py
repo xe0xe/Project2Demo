@@ -64,21 +64,27 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.original_image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
         self.position = [tile_width * pos_x, tile_height * pos_y]
+        self.last_move_x = 0
+        self.last_move_y = 0
 
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             self.rect.x -= 5
             self.position[0] -= 5
+            self.last_move_x = -5
         if keys[pygame.K_d]:
             self.rect.x += 5
             self.position[0] += 5
+            self.last_move_x = 5
         if keys[pygame.K_w]:
             self.rect.y -= 5
             self.position[1] -= 5
+            self.last_move_y = -5
         if keys[pygame.K_s]:
             self.rect.y += 5
             self.position[1] += 5
+            self.last_move_y = 5
         self.rotate()
 
     def rotate(self):
@@ -88,8 +94,19 @@ class Hero(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, int(angle))
         # self.rect = self.image.get_rect(center=self.position)
 
-    def collide(self):
-        pygame.sprite.spritecollide()
+    def collide(self, collidable_object):
+        hits = pygame.sprite.spritecollide(self, collidable_object, False)
+        print(hits)
+        if len(hits) != 0:
+            if self.last_move_x != 0:
+                self.rect.x = self.rect.x - self.last_move_x
+                self.last_move_x = 0
+            if self.last_move_y != 0:
+                self.rect.y = self.rect.y - self.last_move_y
+                self.last_move_y = 0
+        else:
+            self.last_move_x = self.last_move_y = 0
+
 
 
 class Camera:
