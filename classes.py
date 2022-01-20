@@ -39,6 +39,38 @@ class BossBullet(pygame.sprite.Sprite):
 
         elif self.rect.x < 6:
             self.rect.x = Boss().rect.x
+            
+            
+class Enemy(pygame.sprite.Sprite):
+    image1 = pygame.image.load("data/creature.png")
+    image = pygame.transform.scale(image1, (56, 56))
+
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = Enemy.image
+        self.rect = self.image.get_rect()
+        # self.rect.x = random.randint(0, 840)
+        self.rect.x = 500
+        self.rect.y = 800
+        self.A = 448 - self.rect.x
+        self.B = 392 - self.rect.y
+        self.diag = (self.A ** 2 + self.B ** 2) ** (1 / 2)
+        self.dx = self.A / self.diag
+        self.dy = -self.B / self.diag
+        print(self.dx)
+        print(self.dy)
+
+    def update(self):
+        # angle = math.degrees(math.cos())
+        # self.cos = math.cos(math.radians(angle + 90))
+        # self.sin = math.sin(math.radians(angle + 90))
+        # print(str(int(round(math.degrees(math.atan2(A, B))))) + '°')
+        # print(angle)
+        print('dx', self.dx, 'dy', self.dy)
+        self.rect.x += self.dx
+        print(self.rect.x)
+        self.rect.y += self.dy
+        print(self.rect.y)
 
 
 class Bunker(pygame.sprite.Sprite):
